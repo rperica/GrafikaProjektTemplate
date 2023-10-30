@@ -29,8 +29,8 @@ project "GrafikaLabovi_ImePrezime"
     includedirs
     {
         "%{prj.name}/src",
-        "%{prj.name}/src/vendor",
-        "%{prj.name}/res/shaders",
+        "%{prj.name}/src/**",
+        "%{prj.name}/res/shaders/**",
         "Depend/Include"
     }
 
