@@ -81,6 +81,17 @@ void Mesh::LoadMesh(const std::string& meshPath)
             streamBuf.clear();
             streamBuf.str(readLine);
 
+            streamBuf >> temp;
+            x = stoi(temp.substr(0, temp.find('/')))-1;
+            streamBuf >> temp;
+            y = stoi(temp.substr(0, temp.find('/')))-1;
+            streamBuf >> temp;
+            z = stoi(temp.substr(0, temp.find('/')))-1;
+            
+            glm::vec3 normal = glm::normalize(glm::cross(positions[y] - positions[x], positions[z] - positions[x]));
+
+            streamBuf.clear();
+            streamBuf.str(readLine);
 
             while (streamBuf >> temp) {
                 x = 0, y = 0, z = 0;
@@ -103,7 +114,13 @@ void Mesh::LoadMesh(const std::string& meshPath)
                 m_Indices.push_back(index++);
 
                 temp_indices.push_back(x - 1);
-                temp_indices.push_back(y);
+                if (y != 0) {
+                    temp_indices.push_back(y);
+                }
+                else {
+                    normals.push_back(normal);
+                    temp_indices.push_back(normals.size() - 1);
+                }
                 temp_indices.push_back(z);
             }
         }
@@ -114,7 +131,9 @@ void Mesh::LoadMesh(const std::string& meshPath)
         x = temp_indices[f];
         y = temp_indices[f + 1];
         z = temp_indices[f + 2];
+
         m_Mesh.push_back(Vertex(positions[x], normals[y], texCord[z]));
+    
     }
 }
 
